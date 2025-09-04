@@ -12,8 +12,10 @@
     "@tabler/icons-react": "^3.34.1",
     "daisyui": "^5.1.6",
     "next": "15.5.2",
+    "pdfjs-dist": "^5.4.149",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-dropzone": "^14.3.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

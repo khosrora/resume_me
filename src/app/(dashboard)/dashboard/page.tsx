@@ -1,5 +1,6 @@
 "use client";
 
+import { linksDashboard } from "@/lib/links.constance";
 import {
   IconDownload,
   IconEye,
@@ -7,6 +8,7 @@ import {
   IconChevronLeft,
 } from "@tabler/icons-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 // for test
 
@@ -47,10 +49,13 @@ export default function ResumePage() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <button className="btn btn-primary gap-2">
+            <Link
+              href={linksDashboard.link_resume_upload}
+              className="btn btn-primary gap-2"
+            >
               <IconUpload size={18} />
               آپلود رزومه
-            </button>
+            </Link>
             <button className="btn btn-ghost gap-2">
               <IconChevronLeft size={18} />
               راهنما
