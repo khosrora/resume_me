@@ -1,15 +1,57 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const estedad = localFont({
+  variable: "--font-estedad",
+  display: "swap",
+  src: [
+    {
+      path: "../../public/fonts/Estedad-Thin.ttf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Estedad-ExtraLight.ttf",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Estedad-Light.ttf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Estedad-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Estedad-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Estedad-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Estedad-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Estedad-ExtraBold.ttf",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Estedad-Black.ttf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -23,12 +65,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+    <html lang="en" data-theme="dark">
+      <body className={`${estedad.variable} antialiased`}>{children}</body>
     </html>
   );
 }
