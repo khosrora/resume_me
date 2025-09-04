@@ -1,10 +1,38 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: bumblebee --default, dark --dark;
+  themes: light --default, dark --dark;
   rtl: true;
 }
 
 * {
   direction: rtl !important;
   font-family: var(--font-estedad), Arial, Helvetica, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+@layer components {
+  .card-box {
+    @apply bg-base-300 p-4 rounded-xl border border-base-200 space-y-3 shadow-sm transition-all;
+  }
+  .interactive-card {
+    @apply hover:shadow-md hover:-translate-y-0.5 focus-within:shadow-md focus-within:-translate-y-0.5;
+  }
+  .section-title {
+    @apply text-base md:text-lg font-bold;
+  }
+  .section-subtitle {
+    @apply text-sm text-base-content/70;
+  }
+  .list-item {
+    @apply flex items-center justify-between bg-base-200 p-3 rounded-xl hover:bg-base-200/80 transition-colors;
+  }
+  .list-item .actions {
+    @apply flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity;
+  }
+  .muted {
+    @apply text-xs text-base-content/60;
+  }
 }

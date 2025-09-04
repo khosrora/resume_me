@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const themes = ["bumblebee", "dark"];
+import { IconMoon, IconSun } from "@tabler/icons-react";
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useState<string>("dark");
@@ -34,14 +33,13 @@ export default function ThemeSwitcher() {
 
   return (
     <div className="flex items-center gap-2">
-      <label className="font-bold">تم:</label>
+      <span>{theme === "dark" ? <IconMoon /> : <IconSun />}</span>
       <input
         type="checkbox"
         className="toggle toggle-xs"
         checked={theme === "dark"}
         onChange={toggleTheme}
       />
-      <span>{theme === "dark" ? "تاریک" : "روشن"}</span>
     </div>
   );
 }

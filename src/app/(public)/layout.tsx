@@ -1,53 +1,53 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
+import "@/app/globals.css";
 
 const estedad = localFont({
   variable: "--font-estedad",
   display: "swap",
   src: [
     {
-      path: "../../public/fonts/Estedad-Thin.ttf",
+      path: "../../../public/fonts/Estedad-Thin.ttf",
       weight: "100",
       style: "normal",
     },
     {
-      path: "../../public/fonts/Estedad-ExtraLight.ttf",
+      path: "../../../public/fonts/Estedad-ExtraLight.ttf",
       weight: "200",
       style: "normal",
     },
     {
-      path: "../../public/fonts/Estedad-Light.ttf",
+      path: "../../../public/fonts/Estedad-Light.ttf",
       weight: "300",
       style: "normal",
     },
     {
-      path: "../../public/fonts/Estedad-Regular.ttf",
+      path: "../../../public/fonts/Estedad-Regular.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../public/fonts/Estedad-Medium.ttf",
+      path: "../../../public/fonts/Estedad-Medium.ttf",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../../public/fonts/Estedad-SemiBold.ttf",
+      path: "../../../public/fonts/Estedad-SemiBold.ttf",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../../public/fonts/Estedad-Bold.ttf",
+      path: "../../../public/fonts/Estedad-Bold.ttf",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../../public/fonts/Estedad-ExtraBold.ttf",
+      path: "../../../public/fonts/Estedad-ExtraBold.ttf",
       weight: "800",
       style: "normal",
     },
     {
-      path: "../../public/fonts/Estedad-Black.ttf",
+      path: "../../../public/fonts/Estedad-Black.ttf",
       weight: "900",
       style: "normal",
     },
