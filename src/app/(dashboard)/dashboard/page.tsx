@@ -8,6 +8,7 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 import React from "react";
+// for test
 
 const resumes = [
   {
