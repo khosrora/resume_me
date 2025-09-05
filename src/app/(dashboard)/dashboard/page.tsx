@@ -73,7 +73,12 @@ export default function ResumePage() {
           <p className="text-sm text-base-content/70">
             فقط می‌خوام رزومه خودم رو بررسی کنم
           </p>
-          <button className="btn btn-primary w-full">شروع بررسی</button>
+          <Link
+            href={linksDashboard.link_resume_upload}
+            className="btn btn-primary w-full"
+          >
+            شروع بررسی
+          </Link>
         </div>
         <div className="card-box interactive-card shadow-md p-6 space-y-4">
           <h2 className="text-xl font-bold text-base-content">
