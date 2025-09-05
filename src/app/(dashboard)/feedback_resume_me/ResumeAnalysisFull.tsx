@@ -85,25 +85,7 @@ export default function ResumeAnalysisFull({
     <div className="max-w-3xl mx-auto p-4">
       <div className="card bg-base-100 shadow-md">
         <div className="card-body">
-          <h2 className="card-title text-lg mb-4">تحلیل رزومه — خسرو رسولی</h2>
-
-          {/* Circles instead of progress bars */}
-          <div className="flex items-center justify-center gap-10 mb-6">
-            <div className="flex flex-col items-center">
-              <ScoreCircle score={quality} />
-              <span className="mt-2 text-sm font-medium">کیفیت کلی رزومه</span>
-              <span className="text-xs opacity-60">طراحی و محتوا</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <ScoreCircle score={jobChance} />
-              <span className="mt-2 text-sm font-medium">
-                شانس پیدا کردن کار
-              </span>
-              <span className="text-xs opacity-60">
-                براساس مهارت‌ها و تجربه
-              </span>
-            </div>
-          </div>
+       
 
           {/* Sections */}
           <div className="mt-4 space-y-6">

@@ -15,7 +15,8 @@
     "pdfjs-dist": "^5.4.149",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-dropzone": "^14.3.8"
+    "react-dropzone": "^14.3.8",
+    "sonner": "^2.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
