@@ -7,8 +7,13 @@ import { useDropzone } from "react-dropzone";
 import ResumeAnalysisFull from "./ResumeAnalysisFull";
 import ScoreCircle from "@/components/ui/ScoreCircle";
 import { useRouter } from "next/navigation";
+import baseAPI from "@/lib/base_api";
+import { toast } from "sonner";
+import { useAuthStore } from "@/store/authStore";
+import { TypeResume } from "@/store/resumeStore";
 
 export default function ResumeUploader() {
+  const { user } = useAuthStore();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState("");
@@ -79,11 +84,11 @@ export default function ResumeUploader() {
              - کیفیت کلی رزومه (۰ تا ۱۰۰)
              - شانس پیدا کردن کار در زمینه تخصصی (۰ تا ۱۰۰)
           لطفاً خروجی درصدها را دقیقاً به این شکل JSON بده:
-          {"quality": 85, "jobChance": 60}
+          {"quality": تو بگو, "jobChance": تو بگو}
           و سپس متن تحلیلی کامل را بعد از JSON بنویس.
           `;
 
-          setStatusText("در حال ارسال به Gemini...");
+          setStatusText("در حال دریافت اطلاعات ...");
           setCurrentStep(3);
           const result = await analyzeImageWithGemini(base64Image, prompt);
 
@@ -111,6 +116,22 @@ export default function ResumeUploader() {
           setAnalysis(narrative);
           setStatusText("✅ تحلیل انجام شد");
           setCurrentStep(4);
+
+          if (imageResult.file && user) {
+            try {
+              const formData = new FormData();
+              formData.append("result", result);
+              formData.append("imageResume", imageResult.file);
+              formData.append("type", TypeResume.A);
+              await baseAPI.post(`/resume`, formData, {
+                headers: {
+                  Authorization: `Bearer ${user.user.id}`,
+                },
+              });
+            } catch (error) {
+              toast.error(`دوباره امتحان کنید`);
+            }
+          }
         } catch (err) {
           console.error(err);
           setStatusText("❌ خطا در تحلیل رزومه");
@@ -128,9 +149,10 @@ export default function ResumeUploader() {
   };
 
   return (
-    <div className="space-y-4 rtl text-right">
+    <div className="space-y-6 rtl text-right">
       {!analysis ? (
         <>
+          {/* Progress Steps */}
           <div className="w-full">
             <div className="flex items-center gap-2 text-xs text-base-content/70">
               <div
@@ -163,74 +185,88 @@ export default function ResumeUploader() {
             </div>
           </div>
 
+          {/* File Drop Zone */}
           <div
             {...getRootProps()}
-            className={`border-2 border-dashed rounded-md p-6 text-center cursor-pointer transition ${
+            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 ${
               isDragActive
-                ? "bg-base-200 border-primary"
-                : "bg-base-100 border-base-300"
+                ? "bg-primary/5 border-primary shadow-lg"
+                : "bg-base-100 border-base-300 hover:border-primary/50 hover:bg-base-50"
             }`}
           >
             <input {...getInputProps()} />
-            <p className="text-base-content">
-              {isDragActive
-                ? "فایل را رها کنید..."
-                : "برای آپلود رزومه، فایل PDF را اینجا بکشید یا کلیک کنید"}
-            </p>
-            <p className="text-xs text-base-content/60 mt-2">
-              فقط فایل‌های PDF مجاز هستند
-            </p>
+            <div className="space-y-2">
+              <div className="text-4xl opacity-40">📄</div>
+              <p className="text-base-content font-medium">
+                {isDragActive
+                  ? "فایل را رها کنید..."
+                  : "برای آپلود رزومه، فایل PDF را اینجا بکشید یا کلیک کنید"}
+              </p>
+              <p className="text-xs text-base-content/60">
+                فقط فایل‌های PDF مجاز هستند • حداکثر حجم ۱۰ مگابایت
+              </p>
+            </div>
           </div>
 
+          {/* File Rejection Alert */}
           {fileRejections.length > 0 && (
             <div className="alert alert-error">
-              فایل نامعتبر است. لطفاً فقط فایل PDF انتخاب کنید.
+              <span>فایل نامعتبر است. لطفاً فقط فایل PDF انتخاب کنید.</span>
             </div>
           )}
 
+          {/* Selected File Section */}
           {selectedFile && (
-            <div className="flex flex-col gap-3">
-              <div className="alert alert-success w-full flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span>فایل انتخاب‌شده:</span>
-                  <span className="font-bold">{selectedFile.name}</span>
-                  <span className="opacity-70 text-xs">{fileSizeLabel}</span>
+            <div className="space-y-4">
+              <div className="alert alert-success">
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">✅</span>
+                    <div>
+                      <div className="font-bold">{selectedFile.name}</div>
+                      <div className="text-xs opacity-70">{fileSizeLabel}</div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedFile(null);
+                      setAnalysis("");
+                      setPreviewUrl("");
+                      setQuality(null);
+                      setJobChance(null);
+                      setStatusText("");
+                      setCurrentStep(0);
+                    }}
+                    aria-label="حذف فایل"
+                  >
+                    حذف
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-xs"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedFile(null);
-                    setAnalysis("");
-                    setPreviewUrl("");
-                    setQuality(null);
-                    setJobChance(null);
-                    setStatusText("");
-                    setCurrentStep(0);
-                  }}
-                  aria-label="حذف فایل"
-                >
-                  حذف
-                </button>
               </div>
 
+              {/* Preview */}
               {previewUrl && (
-                <div className="card bg-base-100 border border-base-300 overflow-hidden">
-                  <div className="p-3 text-sm opacity-80">
-                    پیش‌نمایش صفحه اول رزومه
+                <div className="card bg-base-100 border border-base-300 shadow-md overflow-hidden">
+                  <div className="card-body p-4">
+                    <div className="text-sm font-medium opacity-80 mb-3">
+                      پیش‌نمایش صفحه اول رزومه
+                    </div>
+                    <img
+                      src={previewUrl}
+                      alt="پیش‌نمایش رزومه"
+                      className="w-full max-h-[400px] object-contain bg-base-200 rounded-lg"
+                    />
                   </div>
-                  <img
-                    src={previewUrl}
-                    alt="پیش‌نمایش رزومه"
-                    className="w-full max-h-[480px] object-contain bg-base-200"
-                  />
                 </div>
               )}
 
-              <div className="flex items-center gap-2">
+              {/* Action Button */}
+              <div className="flex items-center justify-between">
                 <button
-                  className={`btn btn-primary ${isProcessing ? "loading" : ""}`}
+                  className={`btn btn-primary btn-lg ${isProcessing ? "loading" : ""}`}
                   onClick={handleUpload}
                   disabled={isProcessing}
                 >
@@ -245,6 +281,7 @@ export default function ResumeUploader() {
             </div>
           )}
 
+          {/* Status Message */}
           {statusText && (
             <div className="alert alert-info">
               <span>{statusText}</span>
@@ -253,11 +290,14 @@ export default function ResumeUploader() {
         </>
       ) : (
         <>
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-sm opacity-70">نتیجه تحلیل</div>
+          {/* Result Header */}
+          <div className="flex items-center justify-between">
+            <div className="text-lg font-semibold">نتیجه تحلیل رزومه</div>
             <div className="flex items-center gap-2">
               <button
-                className={`btn btn-primary btn-sm ${isProcessing ? "loading" : ""}`}
+                className={`btn btn-primary btn-sm ${
+                  isProcessing ? "loading" : ""
+                }`}
                 onClick={handleUpload}
                 disabled={isProcessing || !selectedFile}
                 aria-label="تحلیل مجدد رزومه"
@@ -275,29 +315,36 @@ export default function ResumeUploader() {
               </button>
             </div>
           </div>
+
+          {/* Score Cards */}
           {(quality !== null || jobChance !== null) && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {quality !== null && (
-                <div className="card bg-base-100 border border-base-300 p-4 flex items-center gap-4">
-                  <ScoreCircle score={quality} />
-                  <div>
-                    <div className="text-sm opacity-70">کیفیت کلی رزومه</div>
-                    <div className="text-lg font-bold">{quality} از ۱۰۰</div>
+                <div className="card bg-base-100 border border-base-300 shadow-md p-6">
+                  <div className="flex items-center gap-4">
+                    <ScoreCircle score={quality} />
+                    <div>
+                      <div className="text-sm opacity-70">کیفیت کلی رزومه</div>
+                      <div className="text-xl font-bold">{quality} از ۱۰۰</div>
+                    </div>
                   </div>
                 </div>
               )}
               {jobChance !== null && (
-                <div className="card bg-base-100 border border-base-300 p-4 flex items-center gap-4">
-                  <ScoreCircle score={jobChance} />
-                  <div>
-                    <div className="text-sm opacity-70">شانس پیدا کردن کار</div>
-                    <div className="text-lg font-bold">{jobChance} از ۱۰۰</div>
+                <div className="card bg-base-100 border border-base-300 shadow-md p-6">
+                  <div className="flex items-center gap-4">
+                    <ScoreCircle score={jobChance} />
+                    <div>
+                      <div className="text-sm opacity-70">شانس پیدا کردن کار</div>
+                      <div className="text-xl font-bold">{jobChance} از ۱۰۰</div>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
           )}
 
+          {/* Analysis Content */}
           {analysis && (
             <div className="whitespace-pre-wrap">
               <ResumeAnalysisFull content={analysis} />

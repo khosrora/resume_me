@@ -1,8 +1,7 @@
+import "@/app/globals.css";
+import ThemeInitializer from "@/components/public/ThemeInitializer";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "@/app/globals.css";
-import Header from "@/components/dashboard/Header";
-import { Toaster } from "sonner";
 
 const estedad = localFont({
   variable: "--font-estedad",
@@ -68,20 +67,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" data-theme="dark">
-      <body className={`${estedad.variable} antialiased`}>
-        <Toaster
-          richColors
-          position="bottom-center"
-          toastOptions={{
-            style: {
-              fontFamily: "var(--font-estedad)",
-            },
-          }}
-        />
-        <div className="max-w-6xl m-auto p-2">
-          <Header />
-          {children}
-        </div>
+      <body
+        className={`${estedad.variable} antialiased flex justify-center items-center max-w-2xl m-auto`}
+      >
+        <ThemeInitializer />
+        {children}
       </body>
     </html>
   );

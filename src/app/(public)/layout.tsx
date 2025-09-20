@@ -1,6 +1,6 @@
+import "@/app/globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "@/app/globals.css";
 
 const estedad = localFont({
   variable: "--font-estedad",
@@ -65,8 +65,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="dark">
-      <body className={`${estedad.variable} antialiased`}>{children}</body>
+    <html lang="fa" data-theme="dark">
+      <body
+        className={`${estedad.variable} antialiased max-w-7xl m-auto px-8 lg:px-0  py-4`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
